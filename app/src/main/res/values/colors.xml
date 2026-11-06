@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand palette (mirrors website design tokens) -->
+    <color name="brand_red">#E30613</color>
+    <color name="brand_red_dark">#B00010</color>
+    <color name="brand_red_soft">#FDECEC</color>
+    <color name="brand_green">#00734A</color>
+    <color name="brand_green_dark">#005234</color>
+    <color name="brand_green_soft">#E7F5EE</color>
+    <color name="light_bg">#FFFFFF</color>
+    <color name="dark_bg">#121217</color>
+    <color name="ic_launcher_background">#E30613</color>
+</resources>

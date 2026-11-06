@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Launcher foreground: white blood drop, safe-zone centered -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group android:scaleX="0.62" android:scaleY="0.62" android:pivotX="54" android:pivotY="54">
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M54,26 C54,26 37,47.5 37,59 C37,68.9 44.6,77 54,77 C63.4,77 71,68.9 71,59 C71,47.5 54,26 54,26 Z" />
+        <!-- small shine -->
+        <path
+            android:fillColor="#33FFFFFF"
+            android:pathData="M46.5,58 C46,63.5 49,68.5 53,70.5 C48.8,69.6 45.2,64.8 45.8,58.6 Z" />
+    </group>
+</vector>

@@ -1,0 +1,76 @@
+name: Android Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Setup Gradle (cache)
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Build release APK (unsigned unless secrets provided)
+        run: ./gradlew assembleRelease --stacktrace
+
+      # Optional signing — add repo secrets to enable:
+      # SIGNING_KEYSTORE_B64 (base64 of .jks), SIGNING_STORE_PASSWORD,
+      # SIGNING_KEY_ALIAS, SIGNING_KEY_PASSWORD
+      - name: Sign release APK
+        env:
+          SIGNING_KEYSTORE_B64: ${{ secrets.SIGNING_KEYSTORE_B64 }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        if: env.SIGNING_KEYSTORE_B64 != ''
+        run: |
+          echo "$SIGNING_KEYSTORE_B64" | base64 -d > release.keystore
+          /usr/lib/jvm/temurin-17-jdk-amd64/bin/jarsigner \
+            -keystore release.keystore \
+            -storepass "$SIGNING_STORE_PASSWORD" \
+            $([ -n "$SIGNING_KEY_PASSWORD" ] && echo -keypass "$SIGNING_KEY_PASSWORD") \
+            app/build/outputs/apk/release/app-release-unsigned.apk "$SIGNING_KEY_ALIAS"
+          mv app/build/outputs/apk/release/app-release-unsigned.apk \
+             app/build/outputs/apk/release/app-release-signed.apk
+
+      - name: Rename artifacts
+        run: |
+          mkdir -p dist
+          cp app/build/outputs/apk/debug/app-debug.apk dist/RCY-RPI-debug.apk
+          if [ -f app/build/outputs/apk/release/app-release-signed.apk ]; then
+            cp app/build/outputs/apk/release/app-release-signed.apk dist/RCY-RPI-release-signed.apk
+          elif [ -f app/build/outputs/apk/release/app-release-unsigned.apk ]; then
+            cp app/build/outputs/apk/release/app-release-unsigned.apk dist/RCY-RPI-release-unsigned.apk
+          fi
+          ls -la dist
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.apk
+          generate_release_notes: true
+          body: |
+            ## RCY-RPI Android — ${{ github.ref_name }}
+
+            **Install:** download the APK → allow "install unknown apps" → install.
+            Use `RCY-RPI-release-unsigned.apk` only for testing; prefer a signed build.
+
+            - Server: https://rcy.invokeil.bond (mirror: https://rcyrpi.pages.dev)
+            - Min Android 10 (API 29)
