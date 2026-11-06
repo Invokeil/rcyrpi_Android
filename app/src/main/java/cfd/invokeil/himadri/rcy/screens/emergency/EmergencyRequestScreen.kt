@@ -434,16 +434,18 @@ fun EmergencyRequestScreen(vm: AppViewModel, nav: NavHostController) {
                             EmergencyRequestBody(
                                 kind = kind ?: "other",
                                 urgency = urgency,
-                                patient_name = patientName.trim().ifBlank { null },
-                                phone = phone.trim(),
-                                alt_phone = altPhone.trim().ifBlank { null },
-                                hospital = if (needHospital) hospital.trim() else null,
-                                blood_group = if (needBlood) bloodGroup else null,
-                                patient_type = if (needBlood) patientType else null,
-                                location = location,
-                                detail_location = detailLocation.trim().ifBlank { null },
-                                needed_at = neededAt.trim().ifBlank { null },
-                                note = note.trim().ifBlank { null },
+                                // length caps mirror the website's zod schema
+                                // (longer input → 400 invalid_input server-side)
+                                patient_name = patientName.trim().take(120).ifBlank { null },
+                                phone = phone.trim().take(20),
+                                alt_phone = altPhone.trim().take(20).ifBlank { null },
+                                hospital = if (needHospital) hospital.trim().take(160) else null,
+                                blood_group = if (needBlood) bloodGroup?.take(4) else null,
+                                patient_type = if (needBlood) patientType?.trim()?.take(60) else null,
+                                location = location.trim().take(120),
+                                detail_location = detailLocation.trim().take(240).ifBlank { null },
+                                needed_at = neededAt.trim().take(40).ifBlank { null },
+                                note = note.trim().take(600).ifBlank { null },
                             )
                         )
                     }

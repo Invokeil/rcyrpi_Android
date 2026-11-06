@@ -92,7 +92,7 @@ fun CertificatesScreen(vm: AppViewModel, nav: NavHostController) {
             return
         }
 
-        val st = rememberApiState("certificates") { ApiClient.api.certificates() }
+        val st = rememberApiState("certificates") { ApiClient.api.certificates(mine = "1") }
         when {
             st.loading -> ListSkeleton(3)
             st.error != null -> ErrorState(st.error) { scope.launch { st.load() } }

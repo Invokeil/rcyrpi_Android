@@ -4,7 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!-- One-tap call uses ACTION_DIAL (dialer opens pre-filled) — CALL_PHONE
+         permission intentionally NOT requested (least privilege). -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- FCM (enable later):
@@ -12,7 +13,7 @@
 
     <application
         android:name=".RCYApp"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"

@@ -65,7 +65,7 @@ fun CertificateDetailScreen(vm: AppViewModel, nav: NavHostController, id: String
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    val st = rememberApiState("cert_detail_$id") { ApiClient.api.certificates() }
+    val st = rememberApiState("cert_detail_$id") { ApiClient.api.certificates(mine = "1") }
     val cert = st.data?.certificates?.firstOrNull { it.id == id }
 
     Column(

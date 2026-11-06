@@ -35,7 +35,7 @@ import cfd.invokeil.himadri.rcy.Routes
 import cfd.invokeil.himadri.rcy.core.i18n.mtl
 import cfd.invokeil.himadri.rcy.core.network.ApiClient
 import cfd.invokeil.himadri.rcy.core.network.AppNotification
-import cfd.invokeil.himadri.rcy.core.network.MarkNotifBody
+import cfd.invokeil.himadri.rcy.core.network.MarkNotifsBody
 import cfd.invokeil.himadri.rcy.core.theme.BrandRed
 import cfd.invokeil.himadri.rcy.ui.components.AppIcon
 import cfd.invokeil.himadri.rcy.ui.components.BrandButton
@@ -121,9 +121,17 @@ fun NotificationsScreen(vm: AppViewModel, nav: NavHostController) {
                             if (!n.read) {
                                 scope.launch {
                                     runCatching {
-                                        ApiClient.api.markNotifications(
-                                            MarkNotifBody(ids = listOf(n.id), action = "read"),
-                                        )
+                                        // split prefixed id → website expects raw ids per store
+                                        val body = when {
+                                            n.id.startsWith("notice:") -> MarkNotifsBody(
+                                                notice_ids = listOf(n.id.removePrefix("notice:")),
+                                            )
+                                            n.id.startsWith("app:") -> MarkNotifsBody(
+                                                app_ids = listOf(n.id.removePrefix("app:")),
+                                            )
+                                            else -> null
+                                        }
+                                        body?.let { ApiClient.api.markNotifications(it) }
                                     }
                                     vm.refreshNotifications()
                                 }

@@ -22,6 +22,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -83,6 +84,7 @@ fun SignupScreen(
     onBack: () -> Unit,
     onLogin: () -> Unit,
     onSuccess: () -> Unit,
+    onTerms: () -> Unit = {},
 ) {
     val vm = LocalAppVM.current
     val scope = rememberCoroutineScope()
@@ -104,6 +106,8 @@ fun SignupScreen(
     var thana by remember { mutableStateOf<String?>(null) }
     var ward by remember { mutableStateOf("") }
     var para by remember { mutableStateOf("") }
+    // website requires agree_terms: z.literal(true) — explicit consent checkbox
+    var agreeTerms by remember { mutableStateOf(false) }
 
     val errs = remember { mutableStateMapOf<String, String>() }
     var submitting by remember { mutableStateOf(false) }
@@ -120,6 +124,8 @@ fun SignupScreen(
     else "a-z, 0-9 and _ — 3 to 20 characters"
     val msgPhone = if (lang.isBn) "১১ সংখ্যার নম্বর দিন (01 দিয়ে শুরু)"
     else "11-digit BD number starting with 01"
+    val msgTerms = if (lang.isBn) "শর্তাবলী স্বীকার করুন"
+    else "Please accept the Terms first"
 
     val districts = division?.let { Geo.districtsOf(it) } ?: emptyList()
     val upazilas = district?.let { Geo.upazilas(it) } ?: emptyList()
@@ -156,6 +162,10 @@ fun SignupScreen(
 
     fun submit() {
         if (!validate(step)) return
+        if (step == 3 && !agreeTerms) {
+            apiError = msgTerms
+            return
+        }
         if (step < 3) {
             step++
             return
@@ -180,6 +190,7 @@ fun SignupScreen(
                             ward = ward.trim(),
                             para = para.trim(),
                         ),
+                        agree_terms = agreeTerms,
                     )
                 )
             }
@@ -478,6 +489,25 @@ fun SignupScreen(
                     tl("addr_para") to para.trim().ifBlank { "—" },
                 ),
             )
+
+            // terms consent — mandatory on the website, so enforced here too
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Checkbox(checked = agreeTerms, onCheckedChange = {
+                    agreeTerms = it
+                    if (it) apiError = null
+                })
+                Text(
+                    if (lang.isBn) "আমি শর্তাবলী পড়েছি এবং সম্মত" else "I accept the Terms & Conditions",
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier
+                        .clickable(onClick = onTerms)
+                        .padding(vertical = 8.dp),
+                )
+            }
         }
 
         if (apiError != null) {

@@ -408,10 +408,16 @@ data class SignupBody(
     val blood_group: String? = null,
     val address: Address,
     val avatar_url: String? = null,
+    // website zod schema: z.literal(true) — explicit consent is mandatory
+    val agree_terms: Boolean = false,
 )
 
 @Serializable
-data class ForgotBody(val id: String)
+data class ForgotBody(
+    // website reads { email, lang } — the login-id field name is NOT accepted
+    val email: String,
+    val lang: String? = null,
+)
 
 @Serializable
 data class ResetBody(val token: String, val password: String)
@@ -438,11 +444,19 @@ data class EmergencyRequestBody(
 @Serializable
 data class CheckoutBody(val item_id: String)
 
+/** POST /api/notifications — website expects { notice_ids?, app_ids? } (raw ids, no prefix) */
 @Serializable
-data class MarkNotifBody(val ids: List<String>, val action: String = "read")
+data class MarkNotifsBody(
+    val notice_ids: List<String>? = null,
+    val app_ids: List<String>? = null,
+)
 
 @Serializable
-data class ChangePasswordBody(val current: String, val password: String)
+data class ChangePasswordBody(
+    // website zod schema: { current_password, new_password }
+    @SerialName("current_password") val current: String,
+    @SerialName("new_password") val password: String,
+)
 
 @Serializable
 data class ProfileUpdateBody(

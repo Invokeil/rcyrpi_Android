@@ -170,7 +170,7 @@ fun ForgotScreen(
                     error = null
                     sending = true
                     scope.launch {
-                        runCatching { ApiClient.api.forgot(ForgotBody(id = email.trim())) }
+                        runCatching { ApiClient.api.forgot(ForgotBody(email = email.trim())) }
                             .onSuccess { res ->
                                 if (res.ok) sent = true else error = res.error ?: "error_generic"
                             }

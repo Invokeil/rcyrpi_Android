@@ -105,6 +105,7 @@ fun ChildGraph(vm: AppViewModel, nav: NavHostController, modifier: Modifier = Mo
                 onBack = { nav.popBackStack() },
                 onLogin = { nav.popBackStack() },
                 onSuccess = { nav.popBackStack() },
+                onTerms = { nav.navigate(Routes.TERMS) },
             )
         }
         composable(FORGOT_ROUTE) {

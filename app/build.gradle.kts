@@ -15,8 +15,8 @@ android {
         applicationId = "cfd.invokeil.himadri.rcy"
         minSdk = 29
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.1.0"
 
         // Default backend — main live site (settable in Settings).
         buildConfigField("String", "DEFAULT_SERVER_URL", "\"https://rcy.invokeil.bond\"")

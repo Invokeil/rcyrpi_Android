@@ -132,9 +132,16 @@ fun ProfileEditScreen(vm: AppViewModel, nav: NavHostController) {
 
     fun save() {
         val e = mutableMapOf<String, String>()
-        if (fullName.isBlank()) e["name"] = msgRequired
+        // website PATCH /api/profile zod schema — full_name min 3 · email ·
+        // phone min 10 · address district/upazila/thana min 2 (else 400)
+        if (fullName.trim().length < 3) e["name"] = msgRequired
         val em = email.trim()
-        if (em.isNotEmpty() && !em.contains('@')) e["email"] = msgEmail
+        if (em.isEmpty() || !em.contains('@')) e["email"] = msgEmail
+        val digits = phone.filter { it.isDigit() }
+        if (digits.length < 10) e["phone"] = msgRequired
+        if ((district ?: "").length < 2) e["district"] = msgRequired
+        if ((upazila ?: "").length < 2) e["upazila"] = msgRequired
+        if ((thana ?: "").length < 2) e["thana"] = msgRequired
         if (e.isNotEmpty()) {
             errs.clear()
             errs.putAll(e)
@@ -229,6 +236,8 @@ fun ProfileEditScreen(vm: AppViewModel, nav: NavHostController) {
                     onValueChange = { phone = it },
                     label = tl("signup_phone"),
                     keyboardType = KeyboardType.Phone,
+                    isError = errs.containsKey("phone"),
+                    supportingText = errs["phone"],
                 )
                 BrandField(
                     value = altPhone,
@@ -276,6 +285,7 @@ fun ProfileEditScreen(vm: AppViewModel, nav: NavHostController) {
                     placeholder = tl("addr_pick_first"),
                     enabled = division != null,
                     onOpen = { picker = "district" },
+                    isError = errs.containsKey("district"),
                 )
                 PickerField(
                     label = tl("addr_upazila"),
@@ -283,6 +293,7 @@ fun ProfileEditScreen(vm: AppViewModel, nav: NavHostController) {
                     placeholder = tl("addr_pick_first"),
                     enabled = district != null,
                     onOpen = { picker = "upazila" },
+                    isError = errs.containsKey("upazila"),
                 )
                 PickerField(
                     label = tl("addr_thana"),
@@ -290,6 +301,7 @@ fun ProfileEditScreen(vm: AppViewModel, nav: NavHostController) {
                     placeholder = tl("addr_pick_first"),
                     enabled = district != null,
                     onOpen = { picker = "thana" },
+                    isError = errs.containsKey("thana"),
                 )
                 BrandField(
                     value = ward,
@@ -397,6 +409,7 @@ private fun PickerField(
     placeholder: String?,
     enabled: Boolean,
     onOpen: () -> Unit,
+    isError: Boolean = false,
 ) {
     Box {
         BrandField(
@@ -405,6 +418,7 @@ private fun PickerField(
             label = label,
             readOnly = true,
             placeholder = placeholder,
+            isError = isError,
             trailing = {
                 Icon(
                     AppIcon.of("chevron-down"),

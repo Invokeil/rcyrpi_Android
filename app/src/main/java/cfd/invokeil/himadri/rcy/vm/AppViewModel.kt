@@ -133,8 +133,20 @@ class AppViewModel(
     fun markAllRead() {
         val items = _notifications.value.items.filter { !it.read }.map { it.id }
         if (items.isEmpty()) return
+        // website POST /api/notifications expects raw ids split by store:
+        //   "notice:<id>" → notice_ids · "app:<id>" → app_ids  (ev:/bc: are read-only)
+        val noticeIds = items.filter { it.startsWith("notice:") }.map { it.removePrefix("notice:") }
+        val appIds = items.filter { it.startsWith("app:") }.map { it.removePrefix("app:") }
+        if (noticeIds.isEmpty() && appIds.isEmpty()) return
         viewModelScope.launch {
-            runCatching { ApiClient.api.markNotifications(cfd.invokeil.himadri.rcy.core.network.MarkNotifBody(ids = items, action = "read")) }
+            runCatching {
+                ApiClient.api.markNotifications(
+                    cfd.invokeil.himadri.rcy.core.network.MarkNotifsBody(
+                        notice_ids = noticeIds.ifEmpty { null },
+                        app_ids = appIds.ifEmpty { null },
+                    )
+                )
+            }
             refreshNotifications()
         }
     }

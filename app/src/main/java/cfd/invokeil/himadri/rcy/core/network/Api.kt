@@ -2,6 +2,7 @@ package cfd.invokeil.himadri.rcy.core.network
 
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -69,7 +70,8 @@ interface Api {
     @GET("api/profile")
     suspend fun profile(): ProfileResponse
 
-    @POST("api/profile")
+    // website exposes profile edit as PATCH (strict zod schema) — not POST
+    @PATCH("api/profile")
     suspend fun updateProfile(@Body body: ProfileUpdateBody): ProfileResponse
 
     @POST("api/profile/password")
@@ -81,14 +83,15 @@ interface Api {
     @POST("api/payments/checkout")
     suspend fun checkout(@Body body: CheckoutBody): CheckoutResponse
 
+    // member scope requires ?mine=1 (without it the route is admin-only)
     @GET("api/certificates")
-    suspend fun certificates(): CertificatesResponse
+    suspend fun certificates(@Query("mine") mine: String? = null): CertificatesResponse
 
     @GET("api/notifications")
     suspend fun notifications(): NotificationsResponse
 
     @POST("api/notifications")
-    suspend fun markNotifications(@Body body: MarkNotifBody): OkResponse
+    suspend fun markNotifications(@Body body: MarkNotifsBody): OkResponse
 
     @POST("api/events/{id}/rsvp")
     suspend fun rsvp(@Path("id") eventId: String, @Body body: RsvpBody): RsvpResponse
