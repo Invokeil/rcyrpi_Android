@@ -66,11 +66,11 @@ class Repo(private val cache: cfd.invokeil.himadri.rcy.core.storage.CacheStore) 
     private suspend fun <T> staleOrFailure(
         key: String,
         serializer: KSerializer<T>,
-    ): Resource<T>? = cache.get(key, serializer::deserialize)?.let { Resource.Stale(it) }
+    ): Resource<T>? = cache.get(key) { appJson.decodeFromString(serializer, it) }?.let { Resource.Stale(it) }
 
     /** Cache-first read (instant render), then refresh in background. */
     suspend fun <T> cachedFirst(
         key: String,
         serializer: KSerializer<T>,
-    ): T? = cache.get(key, serializer::deserialize)
+    ): T? = cache.get(key) { appJson.decodeFromString(serializer, it) }
 }

@@ -156,7 +156,7 @@ fun PaymentsScreen(vm: AppViewModel, nav: NavHostController) {
                             textAlign = TextAlign.Center,
                         )
                         Spacer(Modifier.height(14.dp))
-                        BrandButton(tl("login_btn")) { nav.navigate("ext_login") }
+                        BrandButton(tl("login_btn"), { nav.navigate("ext_login") })
                     }
                 }
             } else {

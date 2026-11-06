@@ -145,7 +145,7 @@ fun SettingsScreen(vm: AppViewModel, nav: NavHostController) {
                 }
                 if (customOpen) {
                     BrandField(customUrl, { customUrl = it }, mtl("server_url"))
-                    BrandButton(tl("pay_done")) {
+                    BrandButton(tl("pay_done"), {
                         val u = customUrl.trim()
                         if (u.isNotBlank()) {
                             vm.setServerUrl(u)
@@ -153,7 +153,7 @@ fun SettingsScreen(vm: AppViewModel, nav: NavHostController) {
                             vm.setServerUrl(null)
                         }
                         currentBase = ApiClient.baseUrl
-                    }
+                    })
                 }
                 Text(
                     mtl("server_url_hint"),

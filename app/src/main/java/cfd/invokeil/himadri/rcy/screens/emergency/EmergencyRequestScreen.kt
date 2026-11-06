@@ -150,7 +150,7 @@ fun EmergencyRequestScreen(vm: AppViewModel, nav: NavHostController) {
                         textAlign = TextAlign.Center,
                     )
                     Spacer(Modifier.height(16.dp))
-                    BrandButton(tl("login_btn")) { nav.navigate("ext_login") }
+                    BrandButton(tl("login_btn"), { nav.navigate("ext_login") })
                 }
             }
         }
@@ -274,7 +274,7 @@ fun EmergencyRequestScreen(vm: AppViewModel, nav: NavHostController) {
             Column(Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(tl("req_urgency"), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                 URGENCY_OPTIONS.chunked(2).forEach { chunk ->
-                    ChoiceChips(chunk.map { it.first to tl(it.second) }, urgency) { urgency = it }
+                    ChoiceChips(chunk.map { it.first to tl(it.second) }, urgency, { urgency = it })
                 }
             }
         }
@@ -304,13 +304,13 @@ fun EmergencyRequestScreen(vm: AppViewModel, nav: NavHostController) {
                 if (needBlood) {
                     Text(tl("req_blood_group"), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                     Geo.BLOOD_GROUPS.chunked(4).forEach { chunk ->
-                        ChoiceChips(chunk.map { it to it }, bloodGroup) { bloodGroup = it; bloodErr = null }
+                        ChoiceChips(chunk.map { it to it }, bloodGroup, { bloodGroup = it; bloodErr = null })
                     }
                     bloodErr?.let { Text(it, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = BrandRed) }
 
                     Text(tl("req_patient_type"), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                     PATIENT_TYPES.chunked(2).forEach { chunk ->
-                        ChoiceChips(chunk.map { it.first to tl(it.second) }, patientType) { patientType = it }
+                        ChoiceChips(chunk.map { it.first to tl(it.second) }, patientType, { patientType = it })
                     }
                 }
 
@@ -411,6 +411,11 @@ fun EmergencyRequestScreen(vm: AppViewModel, nav: NavHostController) {
                 modifier = Modifier.fillMaxWidth(),
             )
         }
+        // composable-scope strings for use inside the (non-composable) onClick lambda
+        val requiredMsg = tl("required_field")
+        val errGenericMsg = tl("error_generic")
+        val loginNoteMsg = tl("req_login_note")
+        val errUnknownMsg = errorText(null)
         BrandButton(
             tl("req_submit"),
             {
@@ -419,12 +424,12 @@ fun EmergencyRequestScreen(vm: AppViewModel, nav: NavHostController) {
                 bloodErr = null; locErr = null; neededErr = null
                 submitError = null
                 var ok = true
-                if (kind == null) { kindErr = tl("required_field"); ok = false }
-                if (phone.filter { ch -> ch.isDigit() }.length < 6) { phoneErr = tl("required_field"); ok = false }
-                if (location.isBlank()) { locErr = tl("required_field"); ok = false }
-                if (needHospital && hospital.isBlank()) { hospitalErr = tl("required_field"); ok = false }
-                if (needBlood && bloodGroup == null) { bloodErr = tl("required_field"); ok = false }
-                if (urgency == "scheduled" && neededAt.isBlank()) { neededErr = tl("required_field"); ok = false }
+                if (kind == null) { kindErr = requiredMsg; ok = false }
+                if (phone.filter { ch -> ch.isDigit() }.length < 6) { phoneErr = requiredMsg; ok = false }
+                if (location.isBlank()) { locErr = requiredMsg; ok = false }
+                if (needHospital && hospital.isBlank()) { hospitalErr = requiredMsg; ok = false }
+                if (needBlood && bloodGroup == null) { bloodErr = requiredMsg; ok = false }
+                if (urgency == "scheduled" && neededAt.isBlank()) { neededErr = requiredMsg; ok = false }
                 if (!ok) return@BrandButton
 
                 submitting = true
@@ -455,15 +460,15 @@ fun EmergencyRequestScreen(vm: AppViewModel, nav: NavHostController) {
                             if (req != null) {
                                 sentRequest = req
                             } else {
-                                submitError = r.error?.let { code -> errorText(code).ifBlank { null } } ?: tl("error_generic")
+                                submitError = r.error?.let { code -> errorText(lang, code).ifBlank { null } } ?: errGenericMsg
                             }
                         }
                         .onFailure { t ->
                             submitting = false
                             submitError = if (t is HttpException && t.code() == 401) {
-                                tl("req_login_note")
+                                loginNoteMsg
                             } else {
-                                errorText(null) + (t.message ?: "")
+                                errUnknownMsg + (t.message ?: "")
                             }
                         }
                 }

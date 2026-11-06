@@ -95,8 +95,8 @@ fun ChildGraph(vm: AppViewModel, nav: NavHostController, modifier: Modifier = Mo
         composable(LOGIN_ROUTE) {
             LoginScreen(
                 onBack = { nav.popBackStack() },
-                onSignup = { nav.navigate(cfd.invokeil.himadri.rcy.ui.nav.SIGNUP_ROUTE) },
-                onForgot = { nav.navigate(cfd.invokeil.himadri.rcy.ui.nav.FORGOT_ROUTE) },
+                onSignup = { nav.navigate(SIGNUP_ROUTE) },
+                onForgot = { nav.navigate(FORGOT_ROUTE) },
                 onSuccess = { nav.popBackStack() },
             )
         }

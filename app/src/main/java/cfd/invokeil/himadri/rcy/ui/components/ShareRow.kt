@@ -106,11 +106,12 @@ fun ShareRow(title: String, url: String, modifier: Modifier = Modifier) {
                     Text(t.label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
+            val copiedMsg = mtl("copied")
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 androidx.compose.material3.Surface(
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                    modifier = Modifier.size(44.dp).clickable { ShareUtil.copy(context, mtl("copied"), url) },
+                    modifier = Modifier.size(44.dp).clickable { ShareUtil.copy(context, copiedMsg, url) },
                 ) {
                     androidx.compose.foundation.layout.Box(contentAlignment = Alignment.Center) {
                         androidx.compose.material3.Icon(

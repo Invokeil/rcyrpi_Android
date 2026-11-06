@@ -1,5 +1,6 @@
 package cfd.invokeil.himadri.rcy.core.network
 
+import kotlinx.serialization.Serializable
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH

@@ -30,7 +30,6 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Handshake
-import androidx.compose.material.icons.filled.Health
 import androidx.compose.material.icons.filled.HealthAndSafety
 import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.filled.Home
@@ -47,6 +46,7 @@ import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.MedicalServices
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MonitorHeart
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.NotificationImportant
 import androidx.compose.material.icons.filled.Paid
@@ -116,7 +116,7 @@ object AppIcon {
         "check", "check-circle", "circle-check" -> Icons.Filled.CheckCircle
         "x", "close" -> Icons.Filled.Close
         "plus", "add" -> Icons.Filled.Add
-        "send" -> Icons.Filled.Send
+        "send" -> Icons.AutoMirrored.Filled.Send
         "link", "external-link" -> Icons.Filled.Link
         "globe", "language" -> Icons.Filled.Language
         "sun", "weather" -> Icons.Filled.WbSunny
@@ -127,7 +127,7 @@ object AppIcon {
         "zap", "flash", "lightning" -> Icons.Filled.FlashOn
         "stethoscope", "medical", "health" -> Icons.Filled.MedicalServices
         "hospital" -> Icons.Filled.HealthAndSafety
-        "activity", "pulse" -> Icons.Filled.Health
+        "activity", "pulse" -> Icons.Filled.MonitorHeart
         "help", "help-circle", "question" -> Icons.Filled.Help
         "info" -> Icons.Filled.Info
         "trophy", "award", "medal", "crown" -> Icons.Filled.EmojiEvents

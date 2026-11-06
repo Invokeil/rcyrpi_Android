@@ -222,15 +222,17 @@ fun CertificateDetailScreen(vm: AppViewModel, nav: NavHostController, id: String
                 }
 
                 // ── actions ───────────────────────────────────────────
+                val brandLabel = tl("brand")
+                val serialLabel = tl("cert_serial")
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     BrandButton(
                         mtl("cert_view_share"),
                         {
-                            val title = cert.title.ifBlank { tl("brand") }
+                            val title = cert.title.ifBlank { brandLabel }
                             ShareUtil.shareText(
                                 context,
                                 title,
-                                title + "\n" + tl("cert_serial") + ": " + cert.serial + "\n" + verifyUrl,
+                                title + "\n" + serialLabel + ": " + cert.serial + "\n" + verifyUrl,
                             )
                         },
                         Modifier.weight(1f),

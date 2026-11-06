@@ -42,6 +42,13 @@ fun errorText(code: String?): String = when (code) {
     else -> tl("error_generic")
 }
 
+/** Non-composable variant for callbacks — pass the ambient lang captured during composition. */
+fun errorText(lang: Lang, code: String?): String = when (code) {
+    null -> ""
+    "login_required" -> t(lang, "login_btn")
+    else -> t(lang, "error_generic")
+}
+
 /** One-line display text for an AppError (offline vs server vs challenge). */
 @Composable
 fun appErrorText(e: AppError?): String = when (e) {

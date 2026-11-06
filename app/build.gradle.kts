@@ -24,6 +24,24 @@ android {
         buildConfigField("String", "MIRROR_SERVER_URL", "\"https://rcyrpi.pages.dev\"")
     }
 
+    // Release signing is read from environment variables so no secret ever
+    // lands in this public repo. Build a signed release with:
+    //   RCY_KEYSTORE_PATH=… RCY_KEYSTORE_PASSWORD=… RCY_KEY_ALIAS=rcyrpi \
+    //   ./gradlew assembleRelease
+    // Without those variables the release build simply stays unsigned.
+    signingConfigs {
+        val ksPath = System.getenv("RCY_KEYSTORE_PATH") ?: ""
+        val ksPass = System.getenv("RCY_KEYSTORE_PASSWORD") ?: ""
+        if (ksPath.isNotBlank() && ksPass.isNotBlank()) {
+            create("release") {
+                storeFile = file(ksPath)
+                storePassword = ksPass
+                keyAlias = System.getenv("RCY_KEY_ALIAS")?.takeIf { it.isNotBlank() } ?: "rcyrpi"
+                keyPassword = ksPass
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -32,6 +50,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.findByName("release")
         }
         debug {
             applicationIdSuffix = ".debug"

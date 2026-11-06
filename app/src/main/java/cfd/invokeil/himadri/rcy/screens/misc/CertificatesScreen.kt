@@ -86,7 +86,7 @@ fun CertificatesScreen(vm: AppViewModel, nav: NavHostController) {
                         fontWeight = FontWeight.Bold,
                     )
                     Spacer(Modifier.height(14.dp))
-                    BrandButton(tl("login_btn")) { nav.navigate("ext_login") }
+                    BrandButton(tl("login_btn"), { nav.navigate("ext_login") })
                 }
             }
             return
