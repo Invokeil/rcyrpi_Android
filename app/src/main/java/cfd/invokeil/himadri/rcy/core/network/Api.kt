@@ -6,6 +6,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
+import kotlinx.serialization.Serializable
 
 /**
  * Retrofit interface — mirrors the website's ~21 server API routes.

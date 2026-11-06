@@ -1,5 +1,7 @@
 package cfd.invokeil.himadri.rcy.core.i18n
 
+import androidx.compose.runtime.Composable
+
 /**
  * Mobile-only strings not present in the website dictionary
  * (pull-to-refresh, offline banner, retry, share targets…).

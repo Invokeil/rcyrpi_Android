@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -127,8 +128,8 @@ fun EmptyState(
 @Composable
 fun ErrorState(
     error: AppError?,
-    onRetry: (() -> Unit)?,
     modifier: Modifier = Modifier,
+    onRetry: (() -> Unit)? = null,
 ) {
     Column(
         modifier.fillMaxWidth().padding(vertical = 30.dp, horizontal = 20.dp),

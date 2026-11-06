@@ -114,7 +114,7 @@ fun DrawerContent(vm: AppViewModel, nav: NavHostController, onClose: () -> Unit)
             }
         } else {
             DrawerItem(t(lang, S.nav_login), AppIcon.of("login"), BrandGreen) {
-                nav.navigate(cfd.invokeil.himadri.rcy.ui.nav.LOGIN_ROUTE); onClose()
+                nav.navigate(LOGIN_ROUTE); onClose()
             }
         }
 

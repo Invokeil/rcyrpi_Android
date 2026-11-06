@@ -30,7 +30,6 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Handshake
-import androidx.compose.material.icons.filled.Health
 import androidx.compose.material.icons.filled.HealthAndSafety
 import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.filled.Home
@@ -61,6 +60,7 @@ import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.filled.ShowChart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.Verified
@@ -72,7 +72,6 @@ import androidx.compose.material.icons.filled.Work
 import androidx.compose.material.icons.filled.Water
 import androidx.compose.material.icons.filled.Waves
 import androidx.compose.material.icons.filled.Collections
-import androidx.compose.material.icons.filled.Campaign
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -116,7 +115,7 @@ object AppIcon {
         "check", "check-circle", "circle-check" -> Icons.Filled.CheckCircle
         "x", "close" -> Icons.Filled.Close
         "plus", "add" -> Icons.Filled.Add
-        "send" -> Icons.Filled.Send
+        "send" -> Icons.AutoMirrored.Filled.Send
         "link", "external-link" -> Icons.Filled.Link
         "globe", "language" -> Icons.Filled.Language
         "sun", "weather" -> Icons.Filled.WbSunny
@@ -127,7 +126,7 @@ object AppIcon {
         "zap", "flash", "lightning" -> Icons.Filled.FlashOn
         "stethoscope", "medical", "health" -> Icons.Filled.MedicalServices
         "hospital" -> Icons.Filled.HealthAndSafety
-        "activity", "pulse" -> Icons.Filled.Health
+        "activity", "pulse" -> Icons.Filled.ShowChart
         "help", "help-circle", "question" -> Icons.Filled.Help
         "info" -> Icons.Filled.Info
         "trophy", "award", "medal", "crown" -> Icons.Filled.EmojiEvents

@@ -219,11 +219,12 @@ private fun AlertCard(alert: FeedAlert, member: Boolean) {
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     } else {
+                        val otapDefaultMsg = tl("otap_default_msg")
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             BrandButton(tl("otap_call"), { ShareUtil.dial(context, phone) })
                             BrandButton(
                                 tl("otap_sms"),
-                                { ShareUtil.sms(context, phone, tl("otap_default_msg")) },
+                                { ShareUtil.sms(context, phone, otapDefaultMsg) },
                                 style = BrandBtnStyle.OUTLINE,
                             )
                             alert.location?.let { loc ->

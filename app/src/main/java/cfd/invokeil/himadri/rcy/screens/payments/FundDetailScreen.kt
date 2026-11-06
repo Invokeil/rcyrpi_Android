@@ -263,6 +263,8 @@ fun FundDetailScreen(vm: AppViewModel, nav: NavHostController, id: String) {
                             payNote?.let {
                                 Text(it, style = MaterialTheme.typography.bodySmall, color = Chart3)
                             }
+                            val payVerifyWaitMsg = tl("pay_verify_wait")
+                            val payLoginFirstMsg = tl("pay_login_first")
                             BrandGradientButton(
                                 if (paying) tl("pay_paying") else tl("pay_paynow"),
                                 {
@@ -283,16 +285,16 @@ fun FundDetailScreen(vm: AppViewModel, nav: NavHostController, id: String) {
                                                     if (url != null) {
                                                         ShareUtil.openUrl(context, url)
                                                     } else {
-                                                        payNote = tl("pay_verify_wait")
+                                                        payNote = payVerifyWaitMsg
                                                     }
                                                 }
                                             }
                                             .onFailure { t ->
                                                 paying = false
                                                 payError = if (t is HttpException && t.code() == 401) {
-                                                    tl("pay_login_first")
+                                                    payLoginFirstMsg
                                                 } else {
-                                                    errorText(null) + (t.message ?: "")
+                                                    (t.message ?: "")
                                                 }
                                             }
                                     }
